@@ -1,0 +1,107 @@
+# https://gist.github.com/NickNaso/0d478f1481686d5bcc868cac06620a60
+name: Windows
+on:
+  release:
+    types: [created]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config: 
+        - {
+            name: "Windows Latest MSVC",
+            os: windows-latest,
+            artifact: "libpdafusb_windows_msvc",
+            build_type: "Release",
+            cc: "cl",
+            cxx: "cl",
+            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvars64.bat",
+            archiver: "7z a -tzip",
+            generators: "Visual Studio 17 2022",
+          }
+        - {
+            name: "Windows Latest MinGW",
+            os: windows-latest,
+            artifact: "libpdafusb_windows_mingw",
+            build_type: "Release",
+            cc: "gcc",
+            cxx: "g++",
+            archiver: "7z a -tzip",
+            generators: "Ninja"
+          }
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Print env
+        run: |
+          echo github.event.action: ${{ github.event.action }}
+          echo github.event_name: ${{ github.event_name }}
+
+      - name: Install dependencies on windows
+        if: startsWith(matrix.config.os, 'windows')
+        run: |
+          choco install ninja cmake 7zip
+          ninja --version
+          cmake --version
+
+      - name: Configure
+        shell: bash
+        run: |
+          mkdir instdir
+          cmake \
+            -S . \
+            -B build \
+            -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+            -G "${{ matrix.config.generators }}" \
+            -DCMAKE_INSTALL_PREFIX:PATH=instdir
+
+      - name: Build
+        shell: bash
+        run: cmake --build build --config ${{ matrix.config.build_type }}
+
+      - name: Install Strip
+        shell: bash
+        run: cmake --install build --strip
+
+      - name: Get TAG name # Tag da release criada
+        id: get_version
+        shell: bash
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: Rename attribute artifact
+        shell: bash
+        run: |
+          echo "artifact=${{ matrix.config.artifact }}-${{ steps.get_version.outputs.VERSION }}.zip" >> $GITHUB_ENV
+
+      - name: Pack
+        shell: bash
+        working-directory: instdir
+        run: |
+          ls -laR
+          ${{ matrix.config.archiver }} ../${{ env.artifact }} .
+
+      - name: Upload
+        uses: actions/upload-artifact@v1
+        with:
+          path: ./${{ env.artifact }}
+          name: ${{ env.artifact }}
+
+      - name: Upload release asset
+        if: github.event_name == 'release' && (github.event.action == 'published' || github.event.action == 'created')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./${{ env.artifact }}
+          asset_name: ${{ env.artifact }}
+          asset_content_type: application/zip
