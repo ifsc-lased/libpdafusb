@@ -2,7 +2,7 @@
 
 > Essa aplicação requer um **Dispositivo Autorizador Fiscal (DAF)** conectado na porta USB do computador onde será executada a aplicação. Caso não tenha um DAF, mas queira testar essa aplicação, então você poderá usar o [DAF-pi](https://github.com/ifsc-lased/daf-pi).
 
-A aplicação disponibilizada aqui permite enviar pedidos da API DAF que dependem dos comandos de transporte do protocolo PDAF-USB `enviarMensagem` ou  `enviarBinário` (veja Seção 6.2 da [Especificação Técnica de Requisitos do DAF - revisão 2.0.1](https://www.sef.sc.gov.br/arquivos_portal/servicos/159/DAF_Especificacao_de_Requisitos_2.0.1.pdf.pdf)). 
+A aplicação disponibilizada aqui permite enviar pedidos da API DAF que dependem dos comandos de transporte do protocolo PDAF-USB `enviarMensagem` ou  `enviarBinario` (veja Seção 6.2 da [Especificação Técnica de Requisitos do DAF - revisão 3.0.0](https://www.sef.sc.gov.br/arquivos_portal/servicos/159/Especificacao_de_Requisitos_do_DAF___versao_3.0.0.pdf)). 
 
 Sintaxe: 
 
@@ -26,7 +26,7 @@ O comando `enviarMensagem` do protocolo PDAF-USB é usado quando deseja-se envia
 Se a comunicação acontecer com sucesso com o DAF, então no console deverá ser impresso o resultado do consultar informações. Veja exemplo abaixo:
 ```
 Mensagem enviada ao DAF: {"msg":8}
-Resposta do DAF: {"res":0,"daf":"xyFtiTZWQaq_czmVKfBsqA","mop":0,"vsb":2,"hsb":"MoxgVDBf9MdYEQtb97TGchVvA8mh3gkjBE-C2-mzviU","fab":"86096781000185","mdl":"daf-pi","cnt":0,"crt":"-----BEGIN CERTIFICATE-----\nMIICJjCCAaugAwIBAgIUaS3sIKXSF6A7DJbWAJefB3sn95gwCgYIKoZIzj0EAwIw\ndDEMMAoGA1UECgwDU0VGMQ4wDAYDVQQLDAVHRVNBQzELMAkGA1UEBhMCQlIxFzAV\nBgNVBAgMDlNhbnRhIENhdGFyaW5hMRYwFAYDVQQHDA1GbG9yaWFub3BvbGlzMRYw\nFAYDVQQDDA1zZWYuc2MuZ292LmJyMB4XDTIxMDUyODE0MzUxOFoXDTMxMDUyNzE0\nMzUxOFowdDEMMAoGA1UECgwDU0VGMQ4wDAYDVQQLDAVHRVNBQzELMAkGA1UEBhMC\nQlIxFzAVBgNVBAgMDlNhbnRhIENhdGFyaW5hMRYwFAYDVQQHDA1GbG9yaWFub3Bv\nbGlzMRYwFAYDVQQDDA1zZWYuc2MuZ292LmJyMHYwEAYHKoZIzj0CAQYFK4EEACID\nYgAEJ2NZpBT8RNKxVuJoPDtRyHZwATAQCPLZJLpHBEfHYw34oqkoxa8rhWvHbkz0\nrEDO2U+aVEwtOGxChZqFtUTQ2a92sDuNtEscv8Kiq63A38vsBrdkEoXHQmAe5HU1\nPVwcMAoGCCqGSM49BAMCA2kAMGYCMQDpSFdJD8/VGq/yXYEEUoxr0AB8rjcwdL3S\nTQ3ZtdW4j6sam5CSdFhkUKSuvW17UMkCMQC+O8Srmy4sZVBlb1gCOxxEmmwxVxEc\nLPHYbf1rpnfzuq44vqAI8MnRcAnLgtQNmr8=\n-----END CERTIFICATE-----\n","est":"INATIVO","mxd":1000,"ndf":0,"rts":[]}
+Resposta do DAF: {"res":0,"daf":"pxZkogT1RBaGaKhn_4w_kQ","mop":0,"vsb":2,"sig":"MGUCMQCo6EID9wl4l0F8r4fnBfgGiLckVsqgoFd0zL00DC03Ny3e57X3f3l19r35L-XJFPoCMGRFJKIl399mDp7yH-4oyuy4VJ0kkaGOPt4AkXQ4zZF4aRQKzKzN4yuhBx48L705Sg","fab":"86096781000185","mdl":"daf-pi","cnt":0,"cfp":"SdFcN6lp3DImbcsgZBOPvXc2HMdBC3juLkD6ee4Fz5w","est":"INATIVO","mxd":1000,"ndf":0}
 ```
 ### Comando `enviarBinario` da API DAF
 
